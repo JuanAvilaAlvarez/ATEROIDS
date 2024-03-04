@@ -4,12 +4,13 @@ import sys
 from ship import *
 
 size = width, heigth = 800, 600
-
 screen = pygame.display.set_mode(size)
 
 def main():
     pygame.init()
-
+    pygame.mixer.init()
+    pygame.mixer.load()
+    pygame.mixer.play()
     backgorund_image = pygame.image.load("images\space.png")
     backgorund_rect = backgorund_image.get_rect()
 
@@ -21,8 +22,14 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
-        ship.update()        
         screen.blit(backgorund_image, backgorund_rect)
+        ship.update()        
+        
+        for bullet in ship.bullets:
+            bullet.update()
+            if bullet.alcance == 0:
+                ship.bullets.remove(bullet)
+            screen.blit(bullet.image, bullet.rect)
         screen.blit(ship.image, ship.rect)
 
         pygame.display.update()
